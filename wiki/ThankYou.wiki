@@ -1,0 +1,10 @@
+= Thank you for the donation =
+
+You have just made a difference, by donating to [http://www.projectkaisei.org/ Ocean Voyages Institute (Project Kaisei)].
+ * [http://twitter.com/share?url=http://code.google.com/p/h5o&text=HTML5%20Outliner%20supports%20cleaner%20oceans%20via%20Project%20Kaisei Tell your friends on Twitter]
+ * [http://www.ammado.com/community/120225 Use ammado API] to raise funds for your causes
+
+== Support cleaner oceans ==
+[http://www.projectkaisei.org/ Ocean Voyages Institute (Project Kaisei)] is a nonprofit, which is working on ocean research and cleanup. Please contribute to their cause. Not sure why? [http://www.youtube.com/watch?v=gbqJ6FLfaJc Because this is wrong].
+
+<wiki:gadget url="http://hosting.gmodules.com/ig/gadgets/file/107207895344353757766/DonateToProjectKaisei.xml" height="100" border="0" />

@@ -1,0 +1,207 @@
+Index: h5o-chrome/build.xml
+===================================================================
+--- h5o-chrome/build.xml	(リビジョン 73)
++++ h5o-chrome/build.xml	(作業コピー)
+@@ -2,25 +2,31 @@
+ 	
+ 	<!-- BUILD TOOLS -->
+     <property description="Files for parsing etc." name="BUILD_DIR" value="../build" />
++	<!-- // SVN は使わないので svnantlib.xml の読み込みをコメントアウトする。
+ 	<taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+ 		<classpath>
+ 			<fileset dir="${BUILD_DIR}/svnant-1.3.0/lib" includes="**/*.jar" />
+ 		</classpath>
+ 	</taskdef>
++	-->
+ 
+     <!-- SETUP -->
+  
+     <property description="Source Folder" name="SRC_DIR" value="src"  />
+ 	<loadfile description="Release version" property="RELEASE_VERSION" srcfile="../version.txt" />
+ 
++	<!-- // svn コマンドを使ってリビジョン番号を取得する箇所をコメントアウトする
+ 	<svn>
+ 		<status path="${basedir}" revisionProperty="svn.revision" />
+ 	</svn>
+ 	<echo>Sandbox Revision: ${svn.revision}</echo>
+ 	<property description="Full build version" name="VERSION" value="${RELEASE_VERSION}.${svn.revision}"  />
++	     // VERSION プロパティには svn.revision を含めないよう修正したものを記載しておく
++	-->
++	<property description="Full build version" name="VERSION" value="${RELEASE_VERSION}"  />
+ 	
+     <property description="Folder for completed build" name="DIST_DIR" value="./dist" />
+-	<property name="DEBUG_DIR" value="${DIST_DIR}/extension" />
++	<property name="DEBUG_DIR" value="${DIST_DIR}/html5outlinerExt.${VERSION}" />
+ 
+     <!-- MAIN -->
+ 	<target name="debug" description="Debug H5O for Chrome build">
+Index: h5o-chrome/src/manifest.json
+===================================================================
+--- h5o-chrome/src/manifest.json	(リビジョン 73)
++++ h5o-chrome/src/manifest.json	(作業コピー)
+@@ -1,5 +1,5 @@
+ {
+-	"name": "HTML5 Outliner",
++	"name": "HTML5 Outliner Extended",
+ 	"version": "@VERSION",
+ 	"manifest_version": 2,	
+ 	"description": "Generates a navigable page outline with heading and sectioning elements",
+Index: h5o-chrome/src/popup.html
+===================================================================
+--- h5o-chrome/src/popup.html	(リビジョン 73)
++++ h5o-chrome/src/popup.html	(作業コピー)
+@@ -7,14 +7,50 @@
+ 			body
+ 			{
+ 				font-family: Verdana, Arial, sans-serif;
+-				color: #000;
++				color: #303030;
+ 				background-color: #fff;
+ 				font-size: 11px;
+ 			}
+ 			#outline
+ 			{
+-				width: 500px;
++				width: 640px;
+ 			}
++            #outline a
++            {
++                text-decoration: none;
++                color: #606060;
++            }
++            .typeBODY
++            {
++                color: #4040FF;
++            }
++            .typeARTICLE
++            {
++                color: #FF60FF;
++            }
++            .typeSECTION
++            {
++                color: #A060FF;
++            }
++            .typeASIDE
++            {
++                color: #FF6060;
++            }
++            .typeNAV
++            {
++                color: #FF9055;
++            }
++            .id
++            {
++                font-size: 9px;
++                margin: 0px 3px;
++            }
++            .untitled
++            {
++                font-style: italic;
++                font-weight: bold;
++                color: #303030;
++            }
+ 			#closeLink
+ 			{
+ 				float: right;
+@@ -34,4 +70,4 @@
+ 		<div id="outline">Loading...</div>
+ 		<script src="popup.js"></script>
+ 	</body>
+-</html>
+\ ファイル末尾に改行がありません
++</html>
+Index: h5o-js/build.xml
+===================================================================
+--- h5o-js/build.xml	(リビジョン 73)
++++ h5o-js/build.xml	(作業コピー)
+@@ -5,11 +5,13 @@
+     <property description="Files for parsing etc." name="BUILD_DIR" value="../build" />
+     <property description="YUICompressor" name="YUICompressor" value="${BUILD_DIR}/yuicompressor-2.4.2.jar" />
+     <property description="YUICompressor" name="ClosureCompiler" value="${BUILD_DIR}/closure-compiler/compiler.jar" />
++	<!-- // SVN は使わないので svnantlib.xml の読み込みをコメントアウトする。
+ 	<taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+ 		<classpath>
+ 			<fileset dir="${BUILD_DIR}/svnant-1.3.0/lib" includes="**/*.jar" />
+ 		</classpath>
+ 	</taskdef>
++	-->
+ 
+     <!-- SETUP -->
+  
+@@ -95,11 +97,15 @@
+     </target>
+ 	
+ 	<target name="release" depends="all">
++	    <!-- // svn コマンドを使ってリビジョン番号を取得する箇所をコメントアウトする
+ 		<svn>
+ 			<status path="${basedir}" revisionProperty="svn.revision" />
+ 		</svn>
+ 		<echo>Sandbox Revision: ${svn.revision}</echo>
+ 		<property description="Full build version" name="VERSION" value="${RELEASE_VERSION}.${svn.revision}"  />
++	         // VERSION プロパティには svn.revision を含めないよう修正したものを記載しておく
++		-->
++		<property description="Full build version" name="VERSION" value="${RELEASE_VERSION}"  />
+ 		<property name="H5O_RELEASE_JS" value="${DIST_DIR}/outliner.${VERSION}.js" />
+ 		<property name="H5O_RELEASE_BOOKMARKLET" value="${DIST_DIR}/outliner.${VERSION}.html" />
+ 
+@@ -140,4 +146,4 @@
+ 		<echo message="${H5O_RELEASE_BOOKMARKLET} built." />
+ 	</target>
+  
+-</project>
+\ ファイル末尾に改行がありません
++</project>
+Index: h5o-js/src/Section.js
+===================================================================
+--- h5o-js/src/Section.js	(リビジョン 73)
++++ h5o-js/src/Section.js	(作業コピー)
+@@ -14,7 +14,17 @@
+ 		
+ 	asHTML: function(createLinks)
+ 	{
+-		var headingText = _sectionHeadingText(this.heading);
++        var startingNodeName = _getTagName(this.startingNode);
++        var headingText = '<span class="type' + startingNodeName + '">' + startingNodeName;
++
++        headingText += _getNodeIdAsHTML(this.startingNode);
++        if ((this.heading.tagName != undefined) && (this.heading.tagName != startingNodeName)) {
++            var headingName = _getTagName(this.heading);
++
++            headingText += ' ( ' + headingName + ' )';
++            headingText += _getNodeIdAsHTML(this.heading);
++        }
++		headingText += ' : ' + _sectionHeadingText(this.heading) + '</span>';
+ 		if (createLinks) {
+ 			headingText = '<a href="#'+_generateId(this.startingNode)+'">'
+ 			              + headingText
+@@ -24,6 +34,16 @@
+ 	}
+ };
+ 
++var _getNodeIdAsHTML = function(node)
++{
++    var id = node.getAttribute('id');
++
++    if ((id == undefined) || (id.length <= 0) || (id.indexOf('h5o-') == 0)) {
++        return '';
++    }
++    return '<span class="id">#' + id + '</span>';
++};
++
+ var _sectionListAsHTML = function (sections, createLinks)
+ {
+ 	var retval = '';
+Index: h5o-js/src/exitNode.js
+===================================================================
+--- h5o-js/src/exitNode.js	(リビジョン 73)
++++ h5o-js/src/exitNode.js	(作業コピー)
+@@ -17,7 +17,8 @@
+ 		// this means, currentSection will change (and we won't get back to it)
+ 		if ((isSecContent(node) || isSecRoot(node)) && !currentSection.heading) {
+ 			
+-			currentSection.heading = '<i>Untitled ' + _getTagName(node) + '</i>';
++			//currentSection.heading = '<i>Untitled ' + _getTagName(node) + '</i>';
++			currentSection.heading = '<span class="untitled">Untitled</span>';
+ 			
+ 		}
+ 		/************ END MODIFICATION ***********************************/

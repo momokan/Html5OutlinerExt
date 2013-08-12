@@ -1,0 +1,8 @@
+You will need:
+  * JDK and Apache Ant configured
+  * [http://subclipse.tigris.org/svnant.html SvnAnt] (extracted in the `build` folder)
+  * [http://developer.yahoo.com/yui/compressor/ YUI Compressor 2.4.2] (JAR in the `build` folder)
+
+`build` folder should be placed in the "trunk" folder (i.e. one level above h5o-js or h5o-chrome)
+
+Running `ant min` will produce a minified version in `dist` folder. Then, if you have [http://www.mozilla.com/firefox/ Firefox], [http://getfirebug.com/ Firebug] and [http://fireunit.org/ FireUnit], you can open up the `index.html` in the `test` folder and observe how nicely it passes several simplistic tests.
