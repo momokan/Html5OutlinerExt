@@ -15,3 +15,14 @@ $ ant
 
 Output product into h5o-chrome/dist/html5outlinerExt.0.5.1/
 
+## License
+
+Extended code is:
+Copyright (c) 2013 momokan (http://chocolapod.sakura.ne.jp/blog/entry/63)
+
+Original code is:
+Copyright (c) 2009, Dominykas Blyžė (http://code.google.com/p/h5o/)
+
+
+
+
